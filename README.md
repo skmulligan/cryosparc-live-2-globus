@@ -4,6 +4,8 @@ Create a Globus batch-transfer manifest containing only accepted movies from a C
 
 The script reads CryoSPARC Live exposure metadata, excludes threshold-rejected and manually rejected exposures, converts CryoSPARC storage paths to Globus-relative paths, and writes a manifest suitable for `globus transfer --batch`.
 
+Works with EPU collections and SerialEM collections.  Takes project ID and collection session ID from the CSV.
+
 ## Example
 
 CryoSPARC Live path:
