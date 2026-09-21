@@ -9,19 +9,19 @@ The script reads CryoSPARC Live exposure metadata, excludes threshold-rejected a
 CryoSPARC Live path:
 
 ```text
-/qb/rawdata/160230/20260713_exo05/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
+/qb/rawdata/160230/collection_session_ID/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
 ```
 
 Globus manifest path:
 
 ```text
-160230/20260713_exo05/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
+160230/collection_session_ID/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
 ```
 
 The output filename is generated automatically from the project and session IDs:
 
 ```text
-160230_20260713_exo05_accepted_movies.txt
+160230_collection_session_ID_accepted_movies.txt
 ```
 
 ## Usage
@@ -48,7 +48,7 @@ Use the generated file with the Globus CLI:
 globus transfer \
     SOURCE_COLLECTION_ID:/ \
     DEST_COLLECTION_ID:/destination/ \
-    --batch 160230_20260713_exo05_accepted_movies.txt
+    --batch 160230_collection_session_ID_accepted_movies.txt
 ```
 
 The original project/session directory structure is preserved.
