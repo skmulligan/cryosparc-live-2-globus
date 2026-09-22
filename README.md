@@ -71,6 +71,12 @@ python3 create_globus_manifest.py exposures.csv \
     --include-rejected
 ```
 
+Export rejected movies:
+```bash
+python create_globus_manifest.py exposures.csv \
+     --rejected-only
+```
+
 The script will stop if multiple project or session IDs are detected unless explicitly allowed:
 
 ```bash

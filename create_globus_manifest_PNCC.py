@@ -62,8 +62,8 @@ def parse_cryosparc_path(path):
 def main():
     parser = argparse.ArgumentParser(
         description=(
-            "Create a Globus batch manifest containing accepted "
-            "CryoSPARC Live movies."
+            "Create a Globus batch manifest from a CryoSPARC Live "
+            "exposure CSV."
         )
     )
 
@@ -78,17 +78,28 @@ def main():
         default=None,
         help=(
             "Output Globus batch manifest. "
-            "If omitted, the filename is generated automatically as "
-            "<project>_<session>_accepted_movies.txt"
+            "If omitted, the filename is generated automatically."
         ),
     )
 
-    parser.add_argument(
+    filter_group = parser.add_mutually_exclusive_group()
+
+    filter_group.add_argument(
         "--include-rejected",
         action="store_true",
         help=(
-            "Include rejected exposures as well. Normally exposures "
-            "with Threshold Reject or Manual Reject are excluded."
+            "Include both accepted and rejected exposures. "
+            "By default, only accepted exposures are included."
+        ),
+    )
+
+    filter_group.add_argument(
+        "--rejected-only",
+        action="store_true",
+        help=(
+            "Create a manifest containing only rejected exposures. "
+            "An exposure is rejected if Threshold Reject or "
+            "Manual Reject is true."
         ),
     )
 
@@ -168,6 +179,8 @@ def main():
                 row["Manual Reject"]
             )
 
+            rejected = threshold_reject or manual_reject
+
             if threshold_reject and manual_reject:
                 both_rejected_count += 1
 
@@ -180,11 +193,14 @@ def main():
             else:
                 accepted_count += 1
 
-            if (
-                not args.include_rejected
-                and (threshold_reject or manual_reject)
-            ):
-                continue
+            # Decide whether this exposure belongs in the manifest.
+            if args.rejected_only:
+                if not rejected:
+                    continue
+
+            elif not args.include_rejected:
+                if rejected:
+                    continue
 
             try:
                 project_id, session_id, globus_path = (
@@ -200,10 +216,15 @@ def main():
             session_ids.add(session_id)
             movies.append(globus_path)
 
-    # Remove duplicate paths while preserving order
+    # Remove duplicate paths while preserving order.
     movies = list(dict.fromkeys(movies))
 
     if not movies:
+        if args.rejected_only:
+            raise SystemExit(
+                "No rejected movies were found."
+            )
+
         raise SystemExit(
             "No movies remain after filtering."
         )
@@ -242,7 +263,17 @@ def main():
             "  --allow-multiple-sessions"
         )
 
-    # Generate output filename automatically if not supplied
+    # Determine manifest type for automatic filename.
+    if args.rejected_only:
+        manifest_type = "rejected_movies"
+
+    elif args.include_rejected:
+        manifest_type = "all_movies"
+
+    else:
+        manifest_type = "accepted_movies"
+
+    # Generate output filename automatically if not supplied.
     if args.output:
         output_file = Path(args.output)
 
@@ -251,12 +282,12 @@ def main():
         session_id = next(iter(session_ids))
 
         output_file = Path(
-            f"{project_id}_{session_id}_accepted_movies.txt"
+            f"{project_id}_{session_id}_{manifest_type}.txt"
         )
 
     else:
         output_file = Path(
-            "accepted_movies.txt"
+            f"{manifest_type}.txt"
         )
 
     with output_file.open(
@@ -329,13 +360,19 @@ def main():
     )
     print()
 
-    if not args.include_rejected:
+    if args.rejected_only:
         print(
-            "Manifest contains accepted exposures only."
+            "Manifest contains rejected exposures only."
         )
-    else:
+
+    elif args.include_rejected:
         print(
             "Manifest contains accepted and rejected exposures."
+        )
+
+    else:
+        print(
+            "Manifest contains accepted exposures only."
         )
 
 
