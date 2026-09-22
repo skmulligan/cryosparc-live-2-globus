@@ -24,7 +24,7 @@ Default is accepted movies only, rejected flag appends rejected_movies to filena
 
 ```text
 160230_collection_session_ID_accepted_movies.txt
-150230_collection_session_ID_rejected_movies.txt
+160230_collection_session_ID_rejected_movies.txt
 ```
 
 
