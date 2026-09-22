@@ -29,7 +29,7 @@ The output filename is generated automatically from the project and session IDs:
 ## Usage
 
 ```bash
-python3 create_globus_manifest.py cryosparc_live_export.csv
+python create_globus_manifest.py cryosparc_live_export.csv
 ```
 
 The CryoSPARC CSV must contain these columns:
@@ -60,14 +60,14 @@ The original project/session directory structure is preserved.
 Specify a custom output filename:
 
 ```bash
-python3 create_globus_manifest.py exposures.csv \
+python create_globus_manifest.py exposures.csv \
     -o custom_manifest.txt
 ```
 
 Include rejected movies:
 
 ```bash
-python3 create_globus_manifest.py exposures.csv \
+python create_globus_manifest.py exposures.csv \
     --include-rejected
 ```
 
