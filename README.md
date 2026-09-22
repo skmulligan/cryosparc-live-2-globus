@@ -20,11 +20,13 @@ Globus manifest path:
 160230/collection_session_ID/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
 ```
 
-The output filename is generated automatically from the project and session IDs:
+Default is accepted movies only, rejected flag appends rejected_movies to filename. The output filename is generated automatically from the project and session IDs:
 
 ```text
 160230_collection_session_ID_accepted_movies.txt
+150230_collection_session_ID_rejected_movies.txt
 ```
+
 
 ## Usage
 
