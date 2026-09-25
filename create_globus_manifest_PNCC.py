@@ -31,7 +31,7 @@ def parse_cryosparc_path(path):
 
         project_id = 160230
         session_id = 20260713_exo05
-        globus_path = 160230/20260713_exo05/epu_session/.../movie.eer
+        globus_path = 20260713_exo05/epu_session/.../movie.eer
     """
     path = path.strip()
 
@@ -56,7 +56,10 @@ def parse_cryosparc_path(path):
     project_id = parts[0]
     session_id = parts[1]
 
-    return project_id, session_id, relative_path
+    # Globus collections are rooted at the project directory.
+    globus_path = relative_path.split("/", 1)[1]
+
+    return project_id, session_id, globus_path
 
 
 def main():

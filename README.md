@@ -17,8 +17,10 @@ CryoSPARC Live path:
 Globus manifest path:
 
 ```text
-160230/collection_session_ID/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
+collection_session_ID/epu_session/Images-Disc1/GridSquare_13043050/Data/movie.eer
 ```
+
+Globus collections are shared by project, so both source and destination paths in the manifest start with the session ID. The project ID is retained for validation, reporting, and the output filename.
 
 Default is accepted movies only, rejected flag appends rejected_movies to filename. The output filename is generated automatically from the project and session IDs:
 
@@ -31,7 +33,7 @@ Default is accepted movies only, rejected flag appends rejected_movies to filena
 ## Usage
 
 ```bash
-python create_globus_manifest.py cryosparc_live_export.csv
+python create_globus_manifest_PNCC.py cryosparc_live_export.csv
 ```
 
 The CryoSPARC CSV must contain these columns:
@@ -55,27 +57,27 @@ globus transfer \
     --batch 160230_collection_session_ID_accepted_movies.txt
 ```
 
-The original project/session directory structure is preserved.
+Use the project's shared collection as the source. The session directory and all directories beneath it are preserved at the destination.
 
 ## Options
 
 Specify a custom output filename:
 
 ```bash
-python create_globus_manifest.py exposures.csv \
+python create_globus_manifest_PNCC.py exposures.csv \
     -o custom_manifest.txt
 ```
 
 Include rejected movies:
 
 ```bash
-python create_globus_manifest.py exposures.csv \
+python create_globus_manifest_PNCC.py exposures.csv \
     --include-rejected
 ```
 
 Export rejected movies:
 ```bash
-python create_globus_manifest.py exposures.csv \
+python create_globus_manifest_PNCC.py exposures.csv \
      --rejected-only
 ```
 
@@ -93,7 +95,7 @@ CryoSPARC Live
      ↓
 Export exposure CSV
      ↓
-create_globus_manifest.py
+create_globus_manifest_PNCC.py
      ↓
 Globus batch manifest
      ↓
